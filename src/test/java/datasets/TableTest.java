@@ -64,4 +64,23 @@ public class TableTest {
         
     }
 	
+	@Test
+    public void createDummyBatchDataset()
+    {
+		double[][] matrixData = { {1,2,3}, {2,5,3}, {6,7,8}, {7,9,0}};
+		RealMatrix X = MatrixUtils.createRealMatrix(matrixData);
+		
+		double[][] matrixData2 = {{1}, {2}, {5}, {7}};
+		RealMatrix Y = MatrixUtils.createRealMatrix(matrixData2);
+		
+		
+		TableDataset dataset = new TableDataset(X, Y);
+		dataset.batch(3);
+		
+		while (dataset.hasNext()) {
+			Item item = dataset.next();
+			System.out.println(item.toString());
+		}
+    }
+	
 }

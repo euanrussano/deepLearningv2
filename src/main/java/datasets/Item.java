@@ -1,6 +1,5 @@
 package datasets;
 
-import org.apache.commons.math4.linear.MatrixUtils;
 import org.apache.commons.math4.linear.RealMatrix;
 import org.apache.commons.math4.linear.RealMatrixFormat;
 
@@ -31,17 +30,10 @@ public class Item {
 	}
 	
 	public String toString() {
-		int numCols = features.getColumnDimension();
-		
-		RealMatrix expanded = MatrixUtils.createRealMatrix(new double[1][numCols+1]);
-		
-		expanded.setSubMatrix(features.getData(), 0, 0);
-		
-		expanded.setSubMatrix(target.getData(), 0, numCols);
 		
 		RealMatrixFormat formatter = new RealMatrixFormat("[", "]\n", "[", "]", "", " ");
 		
-		return formatter.format(expanded);
+		return formatter.format(this.features) + formatter.format(this.target);
 	}
 	
 	

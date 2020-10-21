@@ -5,7 +5,6 @@ import org.apache.commons.math4.linear.RealMatrix;
 import org.apache.commons.math4.linear.RealMatrixFormat;
 import org.junit.Test;
 
-import functions.Linear;
 import functions.Relu;
 import functions.Sigmoid;
 
@@ -32,7 +31,7 @@ public class DenseTest {
 		RealMatrix weights2 = MatrixUtils.createRealMatrix(new double[][] {{0.255, 0.449}});
 		RealMatrix bias2 = MatrixUtils.createRealMatrix(new double[][] {{0.495, 0.651}});
 		
-		RealMatrixFormat formatter = new RealMatrixFormat("[", "]\n", "[", "]", "", " ");
+		//RealMatrixFormat formatter = new RealMatrixFormat("[", "]\n", "[", "]", "", " ");
 		
 		l2.setWeigths(weights2);
 		l2.setBias(bias2);
@@ -137,7 +136,7 @@ public class DenseTest {
 		// backward test generate with example warm up numpy from pytorch using numpy seed 1
 		// the script used to double check the values is "Backpropagation Dense.ipynb"
 		@Test
-		public void testBackwardTwoSamplewithBias() {
+		public void testBackwardOneSamplewithBias() {
 			 
 			RealMatrix X = MatrixUtils.createRealMatrix(new double[][] {{1.62, -0.61}});
 			RealMatrix y = MatrixUtils.createRealMatrix(new double[][] {{-0.53, -1.07}});
@@ -179,6 +178,50 @@ public class DenseTest {
 			System.out.println("db1 = "+ formatter.format(l1.deltab));
 			System.out.println("grad_w1 = "+ formatter.format(deltaout));
 			
+		}
+		
+		@Test
+		public void testBackwardTwoSamplewithBias() {
+			 
+			RealMatrix X = MatrixUtils.createRealMatrix(new double[][] {{1.62, -0.61}, {-0.53, -1.07}});
+			RealMatrix y = MatrixUtils.createRealMatrix(new double[][] {{0.87, -2.3}, {1.74, -0.76}});
+			
+			Layer l1 = new Dense(1,new Relu(),2);
+			Layer l2 = new Dense(2,new Sigmoid());
+			
+			l2.configure(l1.getNumUnits());
+			
+			// hard set the weights
+			
+			RealMatrix weights1 = MatrixUtils.createRealMatrix(new double[][] {{0.87}, {-2.3}});
+			RealMatrix bias1 = MatrixUtils.createRealMatrix(new double[][] {{0.0}});
+			l1.setWeigths(weights1);
+			l1.setBias(bias1);
+					
+			RealMatrix weights2 = MatrixUtils.createRealMatrix(new double[][] {{1.74, -0.76}});
+			RealMatrix bias2 = MatrixUtils.createRealMatrix(new double[][] {{0.0, 0.0}});
+			l2.setWeigths(weights2);
+			l2.setBias(bias2);
+			
+			RealMatrixFormat formatter = new RealMatrixFormat("[", "]\n", "[", "]", "", " ");
+			
+			// forward pass
+			RealMatrix h_relu = l1.forward(X); // 1x2 * 2x1 = 1x1
+			RealMatrix y_pred = l2.forward(h_relu); // 1x1 * 1x2
+			
+			System.out.println("y_pred = " + y_pred + "\n");
+			// backward pass
+			RealMatrix loss_grad = y_pred.add(y.scalarMultiply(-1.0)).scalarMultiply(2);		
+			System.out.println("loss_grad = " + loss_grad + "\n");
+			
+			RealMatrix deltaout = l2.backward(loss_grad);
+			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
+			System.out.println("db2 = "+ formatter.format(l2.deltab));
+			//System.out.println("grad_h_relu = "+ formatter.format(deltaout));
+			deltaout = l1.backward(deltaout);
+			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
+			System.out.println("db1 = "+ formatter.format(l1.deltab));
+			//System.out.println("grad_w1 = "+ formatter.format(deltaout));
 		}
 
 }

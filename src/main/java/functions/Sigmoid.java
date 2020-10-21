@@ -1,14 +1,17 @@
 package functions;
 
-public class Sigmoid implements Function{
+public class Sigmoid extends ActivationFunction{
 	
-	public double evaluate(double z) {
+	String name = "sigmoid";
+	
+	@Override
+	public double evaluateSingle(double z) {
 		return 1/(1 + Math.exp(-z));
 	}
 	
-	public double evaluate_der(double z) {
-		return evaluate(z)*(1-evaluate(z));
+	@Override
+	public double evaluateDerSingle(double z) {
+		return evaluateSingle(z)*(1-evaluateSingle(z));
 	}
-
-
+	
 }

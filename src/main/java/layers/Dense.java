@@ -1,24 +1,27 @@
 package layers;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import org.apache.commons.math4.linear.MatrixUtils;
 import org.apache.commons.math4.linear.RealMatrix;
-import org.apache.commons.math4.linear.RealMatrixFormat;
 
-import functions.Function;
+import functions.ActivationFunction;
+import utils.MatrixOperations;
 
 public class Dense extends Layer{
 	
-	public Dense(int numUnits, Function func) {
+	String type = "dense";
+	
+	public Dense(int numUnits, ActivationFunction func) {
 		super();
 		this.numUnits = numUnits;
 		this.func = func;
 	}
 	
-	public Dense(int numUnits, Function func, int input_shape) {
+	public Dense(int numUnits, ActivationFunction func, int input_shape) {
 		this(numUnits, func);
-		this.input_shape = input_shape;
+		this.inputShape = input_shape;
 	}
 	
 	public void configure(int input_shape) {
@@ -31,8 +34,9 @@ public class Dense extends Layer{
 		for (int col = 0; col < numCols; col++) {
 			for (int row = 0; row < numRows; row++) {
 		        weights_mat[row][col] = Math.random();
+		        
 		    }
-			weights_mat[0][col] = Math.random();
+			bias_mat[0][col] = Math.random();
 		}
 		
 		weights = MatrixUtils.createRealMatrix(weights_mat);
@@ -48,9 +52,10 @@ public class Dense extends Layer{
 		RealMatrix biasMatrix = transformBiasToMatrix(X.getRowDimension());
 		
 		input = X;
+		
 		RealMatrix a = X.multiply(weights).add(biasMatrix); // 1 x 3 x 3 x 10 + 1 x 10 =1 x 10
 		netSum = a;
-		a = transfer(a);
+		a = func.evaluate(a);
 		
 		// store internally the current output
 		return a;
@@ -67,65 +72,25 @@ public class Dense extends Layer{
 		
 	}
 	
-	public RealMatrix transfer(RealMatrix a) {
-		int numRows = a.getRowDimension();
-		int numColumns = a.getColumnDimension();
-		
-		RealMatrix z = a.copy();
-		for (int i=0; i<numRows; i++) {
-			for (int j=0; j<numColumns; j++) {
-				double value_a = a.getEntry(i, j);
-				z.setEntry(i, j, func.evaluate(value_a));
-			}	
-		} 
-		
-		return z;
-	}
-	
-	public RealMatrix transfer_der(RealMatrix a) {
-		int numRows = a.getRowDimension();
-		int numColumns = a.getColumnDimension();
-		
-		RealMatrix z = a.copy();
-		for (int i=0; i<numRows; i++) {
-			for (int j=0; j<numColumns; j++) {
-				double value_a = a.getEntry(i, j);
-				z.setEntry(i, j, func.evaluate_der(value_a));
-			}	
-		} 
-		
-		return z;
-	}
-	
-	public RealMatrix elementMultiply(RealMatrix A, RealMatrix B) {
-		int numRows = A.getRowDimension();
-		int numColumns = A.getColumnDimension();
-		
-		RealMatrix z = A.copy();
-		for (int i=0; i<numRows; i++) {
-			for (int j=0; j<numColumns; j++) {
-				double value_a = A.getEntry(i, j);
-				double value_b = B.getEntry(i, j);
-				z.setEntry(i, j, value_a*value_b);
-			}	
-		} 
-		
-		return z;
-	}
 	@Override
 	public RealMatrix backward(RealMatrix accum_grad) {
 		
 		//System.out.println("a = " + input); // 1 x 2
-		RealMatrix grad_a2 = elementMultiply(transfer_der(netSum),accum_grad);
+		
+		RealMatrix grad_a2 = MatrixOperations.elementMultiply(func.evaluateDer(netSum),accum_grad);
 		//System.out.println("grad_a2 = " + grad_a2);
+		//System.out.println("input = " + input);
+		
 		deltaW = input.transpose().multiply(grad_a2);
-		deltab = grad_a2;
+		//System.out.println(deltaW);
+		deltab = MatrixOperations.ones_like(input).getColumnMatrix(0).transpose().multiply(grad_a2);
+		
 		
 		accum_grad = grad_a2.multiply(weights.transpose());
-		
+		//System.out.println(grad_a2.getRowDimension() + " " + grad_a2.getColumnDimension());
+		//System.out.println(weights.getRowDimension() + " " + weights.getColumnDimension());
 		
 		return accum_grad;
 	}
-
 }
 

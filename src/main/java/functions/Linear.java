@@ -1,14 +1,17 @@
 package functions;
 
-public class Linear implements Function{
+public class Linear extends ActivationFunction{
 	
-	public double evaluate(double z) {
+	String name = "linear";
+	
+	@Override
+	public double evaluateSingle (double z) {
 		return z;
 	}
 	
-	public double evaluate_der(double z) {
+	@Override
+	public double evaluateDerSingle(double z) {
 		return 1;
 	}
-
 
 }

@@ -1,14 +1,17 @@
 package functions;
 
-public class Relu implements Function{
+public class Relu extends ActivationFunction{
 	
-	public double evaluate(double z) {
+	String name = "relu";
+	
+	@Override
+	public double evaluateSingle(double z) {
 		return z>0 ? z: 0;
 	}
 	
-	public double evaluate_der(double z) {
+	@Override
+	public double evaluateDerSingle (double z) {
 		return z>0 ? 1: 0;
 	}
-
 
 }

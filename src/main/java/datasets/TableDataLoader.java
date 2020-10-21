@@ -20,8 +20,7 @@ public class TableDataLoader {
 	  
 	        // create csvReader object passing 
 	        // file reader as a parameter 
-	        CSVReader csvReader = new CSVReader(filereader); 
-	        String[] nextRecord; 
+	        CSVReader csvReader = new CSVReader(filereader);  
 	        
 	        List<String[]> allFileRows = csvReader.readAll();
 	        
@@ -41,7 +40,7 @@ public class TableDataLoader {
 	            row ++;
 	         }
 	    
-		
+		csvReader.close();
 		RealMatrix X = MatrixUtils.createRealMatrix(Xmatrix);
 		RealMatrix Y = MatrixUtils.createRealMatrix(Ymatrix);
 		
