@@ -7,6 +7,10 @@ import com.eclipsesource.json.JsonObject;
 
 public class Accuracy {
 	
+	public Accuracy(){
+		super();
+		//setType("accuracy");
+	}
 	public double value(RealMatrix yTrue, RealMatrix yPred) {
 		
 		int correct = 0;

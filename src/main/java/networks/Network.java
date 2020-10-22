@@ -21,25 +21,24 @@ import com.eclipsesource.json.JsonValue;
 import datasets.Dataset;
 import datasets.Item;
 import layers.Layer;
+import layers.LayerFactory;
 import losses.Loss;
 import losses.Metric;
 import optimizers.Optimizer;
 
 public class Network {
 	
-	List<Layer> layers = new ArrayList<Layer> ();
-	Optimizer optimizer;
-	Loss loss;
-	Loss metric;
+	private List<Layer> layers = new ArrayList<Layer> ();
+	private Optimizer optimizer;
+	private Loss loss;
 	
 	public void add(Layer layer) {
 		layers.add(layer);
 	}
 	
-	public void compile(Optimizer optimizer, Loss loss, Loss metric) {
+	public void compile(Optimizer optimizer, Loss loss) {
 		this.optimizer = optimizer;
 		this.loss = loss;
-		this.metric = metric;
 		
 		// connect dimensions of layers
 		int inputShape = layers.get(0).getInputShape();
@@ -126,71 +125,39 @@ public class Network {
 		}
 
 	}
-	
-	public static Network createFromJSON(String path) {
-		// https://stackoverflow.com/questions/2591098/how-to-parse-json-in-java
-		/*
-		 * {
-			  
-			  "layers": [
-			    {
-			      "type": "Dense",
-			      "numUnits": 1,
-			      "activation": "relu",
-			      "input_shape": 2,
-			      "weights": {{0.87}, {-2.3}}
-			      "bias": {{0.0}}
-			    },
-			    {
-			      "type": "Dense",
-			      "numUnits": 2,
-			      "activation": "sigmoid",
-			      "input_shape": 10,
-			      "weights": {{1.74, -0.76}};
-			      "bias": {{0.0, 0.0}};
-			    }
-			  ],
-			  "metrics": 
-			  {
-			  	"name":"accuracy",
-			  }
-			  "optimizer": {
-			  	"name": "sgd",
-			  	"learningRate": 0.01
-			  	}
-			}
-		 */
-		String content;
-		JsonObject object = null;
-		try {
-			content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
-			object = Json.parse(content).asObject();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String optimizer = ((JsonObject) object.get("optimizer")).get("name").toString();
-		double learningRate= ((JsonObject) object.get("optimizer")).get("learningRate").asDouble();
-		
-		String metrics = object.get("metrics").toString();
-		
-		JsonArray layersJson= object.get("layers").asArray();
-		JsonObject layerJson;
-		for (JsonValue obj : layersJson) {
-			layerJson = (JsonObject) obj;
-		}
-		
-		return null;
+
+	public List<Layer> getLayers() {
+		return layers;
+	}
+
+	public void setLayers(List<Layer> layers) {
+		this.layers = layers;
+	}
+
+	public Optimizer getOptimizer() {
+		return optimizer;
+	}
+
+	public void setOptimizer(Optimizer optimizer) {
+		this.optimizer = optimizer;
+	}
+
+	public Loss getLoss() {
+		return loss;
+	}
+
+	public void setLoss(Loss loss) {
+		this.loss = loss;
 	}
 	
-	public boolean saveAsJson() throws IOException { 
+	public static boolean saveAsJson(Network model) throws IOException { 
 		
 		JsonObject obj = Json.object()
-						.add("metric", metric.toJson())
-						.add("optimizer", optimizer.toJson());
+						.add("optimizer", model.getOptimizer().toJson())
+						.add("loss", model.getLoss().toJson());
 		
 		JsonArray jsonLayers = new JsonArray();
-		for (Layer layer : layers) {
+		for (Layer layer : model.getLayers()) {
 			jsonLayers.add(layer.toJson());
 		 }
 		
@@ -206,5 +173,26 @@ public class Network {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		String out = "Network with " + this.getLayers().size() + " layers.\n" +
+					 "Optimizer = " + this.getOptimizer().toString() + "\n" +
+					 "Loss = " + this.getLoss().toString() + "\n";
+		
+		out += 	"--".repeat(20) + "\n" +
+				"Layers" + "\n" +
+				"--".repeat(20) + "\n";
+		
+		for (Layer layer : layers) {
+			out += layer.toString() + "\n";
+		}
+		
+		out += 	"--".repeat(20) + "\n";
+		
+		return out;
+		
+	}
+	
 
 }
+

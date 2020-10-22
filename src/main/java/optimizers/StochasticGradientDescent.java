@@ -8,7 +8,7 @@ public class StochasticGradientDescent extends Optimizer{
 	
 	public StochasticGradientDescent(double lr) {
 		super(lr);
-		this.name = "sgd";
+		setType("sgd");
 	}
 
 	public RealMatrix updateSingle(RealMatrix X, RealMatrix dX) {

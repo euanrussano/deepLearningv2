@@ -2,8 +2,10 @@ package functions;
 
 public class Linear extends ActivationFunction{
 	
-	String name = "linear";
-	
+	public Linear() {
+		super();
+		setType("linear");
+	}
 	@Override
 	public double evaluateSingle (double z) {
 		return z;

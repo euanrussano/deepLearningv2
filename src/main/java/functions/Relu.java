@@ -2,7 +2,10 @@ package functions;
 
 public class Relu extends ActivationFunction{
 	
-	String name = "relu";
+	public Relu() {
+		super();
+		setType("relu");
+	}
 	
 	@Override
 	public double evaluateSingle(double z) {

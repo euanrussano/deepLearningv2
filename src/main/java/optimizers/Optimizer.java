@@ -15,11 +15,10 @@ public abstract class Optimizer {
 	
 	List<Layer> layers = new ArrayList<Layer>();
 	double learningRate;
-	String name;
+	String type;
 	
 	public Optimizer(double learning_rate) {
 		this.learningRate = learning_rate;
-		this.name = "";
 	}
 	
 	// store the layers in the optimizer for the update process
@@ -56,9 +55,17 @@ public abstract class Optimizer {
 
 	public JsonObject toJson() {
 		JsonObject obj = Json.object()
-				.add("name", name)
+				.add("type", type)
 				.add("learningRate", learningRate);
 		
 		return obj;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

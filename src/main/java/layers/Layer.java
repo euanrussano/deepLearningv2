@@ -10,17 +10,49 @@ import functions.ActivationFunction;
 
 public abstract class Layer {
 	
-	RealMatrix weights;
-	RealMatrix bias;
-	ActivationFunction func;
-	int inputShape;
-	int numUnits;
-	RealMatrix input;
-	RealMatrix netSum;
-	RealMatrix deltaW;
-	RealMatrix deltab;
-	String type;
+	private RealMatrix weights;
+	private RealMatrix bias;
+	private ActivationFunction func;
+	private int inputShape;
+	private int numUnits;
+	private RealMatrix input;
+	private RealMatrix netSum;
+	private RealMatrix deltaW;
+	private RealMatrix deltab;
+	private String type;
 	
+	boolean configured;
+	
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setNumUnits(int numUnits) {
+		this.numUnits = numUnits;
+	}
+
+	public ActivationFunction getFunc() {
+		return func;
+	}
+
+	public void setFunc(ActivationFunction func) {
+		this.func = func;
+	}
+
+	
+	public boolean isConfigured() {
+		return configured;
+	}
+
+	public void setConfigured(boolean configured) {
+		this.configured = configured;
+	}
+
 	public void configure(int input_shape) {
 		
 	}
@@ -51,6 +83,14 @@ public abstract class Layer {
 	
 	public RealMatrix getDeltaBias() {
 		return this.deltab;
+	}
+	
+	public void setDeltaWeights(RealMatrix deltaWeights) {
+		this.deltaW = deltaWeights;
+	}
+	
+	public void setDeltaBias(RealMatrix deltaB) {
+		this.deltab = deltaB;
 	}
 	
 	public void setBias(RealMatrix bias) {
@@ -111,6 +151,22 @@ public abstract class Layer {
 		
 		return obj;
 		
+	}
+
+	public RealMatrix getInput() {
+		return input;
+	}
+
+	public void setInput(RealMatrix input) {
+		this.input = input;
+	}
+
+	public RealMatrix getNetSum() {
+		return netSum;
+	}
+
+	public void setNetSum(RealMatrix netSum) {
+		this.netSum = netSum;
 	}
 
 }

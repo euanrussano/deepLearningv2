@@ -10,37 +10,40 @@ import functions.ActivationFunction;
 import utils.MatrixOperations;
 
 public class Dense extends Layer{
-	
-	String type = "dense";
-	
+		
 	public Dense(int numUnits, ActivationFunction func) {
 		super();
-		this.numUnits = numUnits;
-		this.func = func;
+		setNumUnits(numUnits);
+		setFunc(func);
+		setConfigured(false);
+		setType("dense");
 	}
 	
 	public Dense(int numUnits, ActivationFunction func, int input_shape) {
 		this(numUnits, func);
-		this.inputShape = input_shape;
+		setInputShape(input_shape);
 	}
 	
 	public void configure(int input_shape) {
-		int numRows = input_shape;
-		int numCols = numUnits;
-		
-		double[][] weights_mat = new double[numRows][numCols];
-		double[][] bias_mat = new double[1][numCols];
-		
-		for (int col = 0; col < numCols; col++) {
-			for (int row = 0; row < numRows; row++) {
-		        weights_mat[row][col] = Math.random();
-		        
-		    }
-			bias_mat[0][col] = Math.random();
+		if (!isConfigured()) {
+			int numRows = input_shape;
+			int numCols = getNumUnits();
+			
+			double[][] weights_mat = new double[numRows][numCols];
+			double[][] bias_mat = new double[1][numCols];
+			
+			for (int col = 0; col < numCols; col++) {
+				for (int row = 0; row < numRows; row++) {
+			        weights_mat[row][col] = Math.random();
+			        
+			    }
+				bias_mat[0][col] = Math.random();
+			}
+			
+			
+			setWeigths(MatrixUtils.createRealMatrix(weights_mat));
+			setBias(MatrixUtils.createRealMatrix(bias_mat));
 		}
-		
-		weights = MatrixUtils.createRealMatrix(weights_mat);
-		bias = MatrixUtils.createRealMatrix(bias_mat);
 		 
 	}
 	
@@ -51,11 +54,11 @@ public class Dense extends Layer{
 		// adjust the bias vector to a matrix
 		RealMatrix biasMatrix = transformBiasToMatrix(X.getRowDimension());
 		
-		input = X;
+		setInput(X);
 		
-		RealMatrix a = X.multiply(weights).add(biasMatrix); // 1 x 3 x 3 x 10 + 1 x 10 =1 x 10
-		netSum = a;
-		a = func.evaluate(a);
+		RealMatrix a = X.multiply(getWeights()).add(biasMatrix); // 1 x 3 x 3 x 10 + 1 x 10 =1 x 10
+		setNetSum(a);
+		a = getFunc().evaluate(a);
 		
 		// store internally the current output
 		return a;
@@ -68,7 +71,7 @@ public class Dense extends Layer{
 		
 		RealMatrix onesMat= MatrixUtils.createRealMatrix(onesVec);
 		
-		return bias.transpose().multiply(onesMat).transpose();
+		return getBias().transpose().multiply(onesMat).transpose();
 		
 	}
 	
@@ -77,16 +80,17 @@ public class Dense extends Layer{
 		
 		//System.out.println("a = " + input); // 1 x 2
 		
-		RealMatrix grad_a2 = MatrixOperations.elementMultiply(func.evaluateDer(netSum),accum_grad);
+		ActivationFunction func = getFunc();
+		RealMatrix grad_a2 = MatrixOperations.elementMultiply(func.evaluateDer(getNetSum()),accum_grad);
 		//System.out.println("grad_a2 = " + grad_a2);
 		//System.out.println("input = " + input);
 		
-		deltaW = input.transpose().multiply(grad_a2);
+		setDeltaWeights(getInput().transpose().multiply(grad_a2));
 		//System.out.println(deltaW);
-		deltab = MatrixOperations.ones_like(input).getColumnMatrix(0).transpose().multiply(grad_a2);
+		setDeltaBias(MatrixOperations.ones_like(getInput()).getColumnMatrix(0).transpose().multiply(grad_a2));
 		
 		
-		accum_grad = grad_a2.multiply(weights.transpose());
+		accum_grad = grad_a2.multiply(getWeights().transpose());
 		//System.out.println(grad_a2.getRowDimension() + " " + grad_a2.getColumnDimension());
 		//System.out.println(weights.getRowDimension() + " " + weights.getColumnDimension());
 		

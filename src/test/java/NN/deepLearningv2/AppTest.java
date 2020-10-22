@@ -19,6 +19,7 @@ import losses.Loss;
 import losses.MeanSquaredError;
 import losses.Metric;
 import networks.Network;
+import networks.NetworkFactory;
 import optimizers.Optimizer;
 import optimizers.StochasticGradientDescent;
 
@@ -64,7 +65,7 @@ public class AppTest
 		
 		model.add(l1);
 		model.add(l2);
-		model.compile(sgd, mse, mse_metric);
+		model.compile(sgd, mse);
 		
 		l1.setWeigths(weights1);
 		l1.setBias(bias1);
@@ -101,7 +102,7 @@ public class AppTest
 		
 		model.add(l1);
 		model.add(l2);
-		model.compile(sgd, mse, mse_metric);
+		model.compile(sgd, mse);
 		
 		l1.setWeigths(weights1);
 		l1.setBias(bias1);
@@ -141,7 +142,7 @@ public class AppTest
 		
 		model.add(l1);
 		model.add(l2);
-		model.compile(sgd, mse, mse_metric);
+		model.compile(sgd, mse);
 		
 		l1.setWeigths(weights1);
 		l1.setBias(bias1);
@@ -172,7 +173,7 @@ public class AppTest
 		model.add(l1);
 		model.add(l2);
 		model.add(l3);
-		model.compile(sgd, mse, mse_metric);
+		model.compile(sgd, mse);
 		
 		
 		model.fit(dataset, 100);
@@ -199,13 +200,14 @@ public class AppTest
 		model.add(l1);
 		model.add(l2);
 		model.add(l3);
-		model.compile(sgd, mse, mse_metric);
+		model.compile(sgd, mse);
 		
 		
 		model.fit(dataset, 10);
 		
+		System.out.println(model);
 		try {
-			model.saveAsJson();
+			Network.saveAsJson(model);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -215,9 +217,9 @@ public class AppTest
     @Test
     public void testImportNetwork()
     {
-		Network model = new Network();
+		Network model = NetworkFactory.createFromJSON("C:\\Users\\eruss\\eclipse-workspace\\deepLearningv2\\model.json");
 		
-		model.createFromJSON("C:\\Users\\eruss\\eclipse-workspace\\deepLearningv2\\model.json");
+		System.out.println(model);
 		
     }
 }

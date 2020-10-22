@@ -2,10 +2,21 @@ package losses;
 
 import org.apache.commons.math4.linear.RealMatrix;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+
 public abstract class Loss {
 	
-	String name;
+	String type;
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public RealMatrix evaluate(RealMatrix yTrue, RealMatrix yPred) {return null;}
 	
 	public double evaluateSum(RealMatrix yTrue, RealMatrix yPred) {
@@ -24,7 +35,10 @@ public abstract class Loss {
 	
 	public RealMatrix evaluateDer(RealMatrix yTrue, RealMatrix yPred) {return null;}
 	
-	public String toJson() {
-		return name;
+	public JsonObject toJson() {
+		JsonObject obj = Json.object()
+				.add("type", type);
+		
+		return obj;
 	}
 }

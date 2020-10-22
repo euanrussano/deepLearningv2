@@ -6,7 +6,10 @@ import com.eclipsesource.json.JsonObject;
 
 public class MeanSquaredError extends Loss {
 	
-	String name = "meanSquaredError";
+	public MeanSquaredError() {
+		super();
+		setType("mse");
+	}
 	
 	// Metric method
 	public double value(RealMatrix yTrue, RealMatrix yPred)  {

@@ -82,10 +82,10 @@ public class DenseTest {
 		System.out.println("loss_grad = " + loss_grad + "\n");
 		
 		RealMatrix deltaout = l2.backward(loss_grad);
-		System.out.println("dw2 = "+ formatter.format(l2.deltaW));
+//		System.out.println("dw2 = "+ formatter.format(l2.deltaW));
 		System.out.println("grad_h_relu = "+ formatter.format(deltaout));
 		deltaout = l1.backward(deltaout);
-		System.out.println("dw1 = "+ formatter.format(l1.deltaW));
+//		System.out.println("dw1 = "+ formatter.format(l1.deltaW));
 		System.out.println("grad_w1 = "+ formatter.format(deltaout));
 	}
 	
@@ -126,10 +126,10 @@ public class DenseTest {
 			System.out.println("loss_grad = " + loss_grad + "\n");
 			
 			RealMatrix deltaout = l2.backward(loss_grad);
-			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
+//			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
 			System.out.println("grad_h_relu = "+ formatter.format(deltaout));
 			deltaout = l1.backward(deltaout);
-			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
+//			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
 			System.out.println("grad_w1 = "+ formatter.format(deltaout));
 		}
 		
@@ -170,13 +170,13 @@ public class DenseTest {
 			System.out.println("loss_grad = " + loss_grad + "\n");
 			
 			RealMatrix deltaout = l2.backward(loss_grad);
-			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
-			System.out.println("db2 = "+ formatter.format(l2.deltab));
-			System.out.println("grad_h_relu = "+ formatter.format(deltaout));
+//			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
+//			System.out.println("db2 = "+ formatter.format(l2.deltab));
+//			System.out.println("grad_h_relu = "+ formatter.format(deltaout));
 			deltaout = l1.backward(deltaout);
-			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
-			System.out.println("db1 = "+ formatter.format(l1.deltab));
-			System.out.println("grad_w1 = "+ formatter.format(deltaout));
+//			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
+//			System.out.println("db1 = "+ formatter.format(l1.deltab));
+//			System.out.println("grad_w1 = "+ formatter.format(deltaout));
 			
 		}
 		
@@ -215,12 +215,12 @@ public class DenseTest {
 			System.out.println("loss_grad = " + loss_grad + "\n");
 			
 			RealMatrix deltaout = l2.backward(loss_grad);
-			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
-			System.out.println("db2 = "+ formatter.format(l2.deltab));
+//			System.out.println("dw2 = "+ formatter.format(l2.deltaW));
+//			System.out.println("db2 = "+ formatter.format(l2.deltab));
 			//System.out.println("grad_h_relu = "+ formatter.format(deltaout));
 			deltaout = l1.backward(deltaout);
-			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
-			System.out.println("db1 = "+ formatter.format(l1.deltab));
+//			System.out.println("dw1 = "+ formatter.format(l1.deltaW));
+//			System.out.println("db1 = "+ formatter.format(l1.deltab));
 			//System.out.println("grad_w1 = "+ formatter.format(deltaout));
 		}
 

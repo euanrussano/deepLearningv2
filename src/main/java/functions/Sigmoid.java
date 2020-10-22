@@ -2,7 +2,10 @@ package functions;
 
 public class Sigmoid extends ActivationFunction{
 	
-	String name = "sigmoid";
+	public Sigmoid() {
+		super();
+		setType("sigmoid");
+	}
 	
 	@Override
 	public double evaluateSingle(double z) {

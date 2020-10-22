@@ -4,8 +4,16 @@ import org.apache.commons.math4.linear.RealMatrix;
 
 public abstract class ActivationFunction {
 	
-	String name;
+	private String type;
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public double evaluateSingle(double z) {return z;}
 	
 	public double evaluateDerSingle(double z) {return z;}
@@ -41,6 +49,6 @@ public abstract class ActivationFunction {
 	}
 
 	public String toJson() {
-		return name;
+		return type;
 	}
 }
